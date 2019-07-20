@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>lazyimg</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .wrapper {
+            width: 990px;
+            margin: 50px auto;
+            overflow: hidden;
+        }
+
+        .image li {
+            float: left;
+            margin: 20px 20px 0 0;
+        }
+
+        .image li img {
+            width: 286px;
+            height: 360px;
+        }
+
+        .dom {
+            height: 410px;
+        }
+
+        .fn li {
+            float: left;
+            width: 200px;
+            height: 200px;
+            margin-right: 20px;
+            background: #EEE;
+        }
+
+        .bg {
+            width: 970px;
+            height: 385px;
+            margin: 0 auto;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .lazy-loading {
+            background: url(loading.gif) no-repeat center center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <ul class="image">
+        <li><img lazy-src="temp/1.jpg" alt=""/></li>
+        <li><img lazy-src="temp/2.jpg" alt=""/></li>
+        <li><img lazy-src="temp/3.jpg" alt=""/></li>
+        <li><img lazy-src="temp/4.jpg" alt=""/></li>
+        <li><img lazy-src="temp/1.jpg" alt=""/></li>
+        <li><img lazy-src="temp/2.jpg" alt=""/></li>
+        <li><img lazy-src="temp/3.jpg" alt=""/></li>
+        <li><img lazy-src="temp/4.jpg" alt=""/></li>
+        <li><img lazy-src="temp/1.jpg" alt=""/></li>
+        <li><img lazy-src="temp/2.jpg" alt=""/></li>
+        <li><img lazy-src="temp/3.jpg" alt=""/></li>
+        <li><img lazy-src="temp/4.jpg" alt=""/></li>
+        <li><img lazy-src="temp/1.jpg" alt=""/></li>
+        <li><img lazy-src="temp/2.jpg" alt=""/></li>
+        <li><img lazy-src="temp/3.jpg" alt=""/></li>
+    </ul>
+</div>
+
+<div class="wrapper">
+    <div class="dom">
+        <script type="text/html">
+            <h3>这是一整段DOM懒加载</h3>
+            <ul class="image">
+                <li><img src="temp/2.jpg" alt=""/></li>
+                <li><img src="temp/2.jpg" alt=""/></li>
+                <li><img src="temp/2.jpg" alt=""/></li>
+            </ul>
+        </script>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div class="dom">
+        <script type="text/html">
+            <h3>这是一整段DOM懒加载</h3>
+            <ul class="image">
+                <li><img src="temp/3.jpg" alt=""/></li>
+                <li><img src="temp/3.jpg" alt=""/></li>
+                <li><img src="temp/3.jpg" alt=""/></li>
+            </ul>
+        </script>
+    </div>
+</div>
+
+<div class="wrapper">
+    <ul class="fn fn-1">
+        <li id="testfn-1"></li>
+        <li id="testfn-2"></li>
+        <li id="testfn-3"></li>
+        <li id="testfn-4"></li>
+    </ul>
+</div>
+
+<div class="wrapper">
+    <ul class="fn fn-2">
+        <li title="111"></li>
+        <li title="222"></li>
+        <li title="333"></li>
+        <li title="444"></li>
+    </ul>
+</div>
+
+<div class="wrapper">
+    <ul class="fn fn-group">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+<div class="wrapper">
+    <ul class="fn fn-group">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
+<div class="wrapper">
+    <div class="bg" lazy-bg="temp/bg.jpg" id="testbg"></div>
+</div>
+<div id="a1" class="wrapper" style="display:none;">
+    <div id="a2" class="bg" lazy-bg="temp/bg.jpg"></div>
+</div>
+
+<script type="text/javascript" src="http://res.suning.cn/??public/v3/js/jquery.js"></script>
+<script type="text/javascript" src="../lazyimg.js"></script>
+<script type="text/javascript">
+    // 纯图片
+
+    // 全局方法
+    lazyimg.listen();
+    // jquery
+    /*$('img').lazyimg(function (obj) {
+        console.log(obj);
+    });*/
+
+    // 背景图
+    lazyimg.listen('.bg', 'bg');
+    //$('.bg').lazyimg('bg');
+
+
+    // DOM
+    lazyimg.listen('.dom', 'dom');
+    //$('.dom').lazyimg('dom');
+
+    // FUNCTION
+    lazyimg.listen('.fn-1 li', 'fn', function (obj) {
+        obj.text('我的ID是' + obj.attr('id'));
+    });
+    /*$('.fn-1 li').lazyimg('fn',function (obj) {
+        obj.text('我的ID是' + obj.attr('id'));
+    });*/
+
+
+    lazyimg.listen('.fn-2 li', 'fn', function (obj) {
+        obj.text('我的title是' + obj.attr('title'));
+    });
+    /*$('.fn-2 li').lazyimg('fn',function (obj) {
+        obj.text('我的title是' + obj.attr('title'));
+    })*/
+
+
+    // 批量处理
+    var count = 0;
+    lazyimg.listen('.fn-group li', 'bat', function (objs) {
+        count++;
+        for (var i = 0; i < objs.length; i++) {
+            objs[i].text('我是第' + count + '批被处理的');
+        }
+    });
+    /*$('.fn-group li').lazyimg('bat',function (objs) {
+        count++;
+        for (var i = 0; i < objs.length; i++) {
+            objs[i].text('我是第' + count + '批被处理的');
+        }
+    })*/
+
+</script>
+
+</body>
+
+</html>
